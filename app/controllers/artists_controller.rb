@@ -1,6 +1,16 @@
 class ArtistsController < ApplicationController
+  before_action :set_preferences, only: [:index, :new]
+
   def index
-    @artists = Artist.all
+    #binding.pry
+    #if preferences exist, and there is a artist_sort_order attribute for preferences
+    if @preferences && @preferences.artist_sort_order
+        #create a variable with a hash of all of the Artists that are orders by name, depending on the artist_sort_order attribute for the preferences)
+        @artists = Artist.order(name: @preferences.artist_sort_order)
+    else
+            @artists = Artist.all
+    end
+
   end
 
   def show
@@ -49,5 +59,9 @@ class ArtistsController < ApplicationController
 
   def artist_params
     params.require(:artist).permit(:name)
+  end
+
+  def set_preferences
+        @preferences = Preference.first
   end
 end
