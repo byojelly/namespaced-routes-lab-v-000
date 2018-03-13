@@ -26,7 +26,7 @@ Create a PreferencesController, routes, and views to manage the preferences. Do 
 
           #app/views/admin/preferences
           #setup views/admin/preferences/index.html.erb file
-                #create a form to enable/disable admin preferences
+                #create a form to enable/disable admin preference
                 #this form_for uses radio buttons to manipulate the admin preferences
           #PreferencesController setup index action so that view file can work off the @preference through a first_or_create action
 
