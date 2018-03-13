@@ -50,6 +50,9 @@ Create a PreferencesController, routes, and views to manage the preferences. Do 
                 ##if preferences exist and the user does not have a preference allowing them to create an artist then send the user back to the artists index
                 ##else (meaning preferences exist and the user has access to create a new artist), instantiate a new artist without persisting to db
           #lets modify Song controller in the same manner as Artist controller
+                #set before actions
+                #modify the Song index action, to interpret preferences with params artist_id included and not included
+                #setup new
 
 
 
@@ -65,67 +68,83 @@ Update the songs#new and artists#new actions to check that creating new songs or
 
 Make sure tests pass.
 
-
-class ArtistsController < ApplicationController
+class SongsController < ApplicationController
   before_action :set_preferences, only: [:index, :new]
 
   def index
-    if @preferences && @preferences.artist_sort_order
-      @artists = Artist.order(name: @preferences.artist_sort_order)
+    if params[:artist_id]
+      @artist = Artist.find_by(id: params[:artist_id])
+      if @artist.nil?
+        redirect_to artists_path, alert: "Artist not found"
+      elsif @preferences && @preferences.song_sort_order
+        @songs = @artist.songs.order(title: @preferences.song_sort_order)
+      else
+        @songs = @artist.songs
+      end
+    elsif @preferences && @preferences.song_sort_order
+      @songs = Song.order(title: @preferences.song_sort_order)
     else
-      @artists = Artist.all
+      @songs = Song.all
     end
   end
 
   def show
-    @artist = Artist.find(params[:id])
+    if params[:artist_id]
+      @artist = Artist.find_by(id: params[:artist_id])
+      @song = @artist.songs.find_by(id: params[:id])
+      if @song.nil?
+        redirect_to artist_songs_path(@artist), alert: "Song not found"
+      end
+    else
+      @song = Song.find(params[:id])
+    end
   end
 
   def new
-    if @preferences && !@preferences.allow_create_artists
-      redirect_to artists_path
+    if @preferences && !@preferences.allow_create_songs
+      redirect_to songs_path
     else
-      @artist = Artist.new
+      @song = Song.new
     end
   end
 
   def create
-    @artist = Artist.new(artist_params)
+    @song = Song.new(song_params)
 
-    if @artist.save
-      redirect_to @artist
+    if @song.save
+      redirect_to @song
     else
       render :new
     end
   end
 
   def edit
-    @artist = Artist.find(params[:id])
+    @song = Song.find(params[:id])
   end
 
   def update
-    @artist = Artist.find(params[:id])
+    @song = Song.find(params[:id])
 
-    @artist.update(artist_params)
+    @song.update(song_params)
 
-    if @artist.save
-      redirect_to @artist
+    if @song.save
+      redirect_to @song
     else
       render :edit
     end
   end
 
   def destroy
-    @artist = Artist.find(params[:id])
-    @artist.destroy
-    flash[:notice] = "Artist deleted."
-    redirect_to artists_path
+    @song = Song.find(params[:id])
+    @song.destroy
+    flash[:notice] = "Song deleted."
+    redirect_to songs_path
   end
 
   private
 
-  def artist_params
-    params.require(:artist).permit(:name)
+  def song_params
+    params.require(:song).permit(:title, :artist_name)
   end
 
   def set_preferences
