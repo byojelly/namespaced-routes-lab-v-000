@@ -28,7 +28,17 @@ Create a PreferencesController, routes, and views to manage the preferences. Do 
           #setup views/admin/preferences/index.html.erb file
                 #create a form to enable/disable admin preferences
                 #this form_for uses radio buttons to manipulate the admin preferences
-          #PreferencesController setup index action so that view file can work off the @preference
+          #PreferencesController setup index action so that view file can work off the @preference through a first_or_create action
+
+          #lets be able to update the preferences
+                #in our config/routes.rb file, include :update in our namespace preferences resources
+                #in our PreferencesController, add a private strong params action called preference_params that allows us to change the instances attributes
+                #in our PreferencesController, add an update action that
+                        #finds the current params being worked on
+                        #updates with strong params
+                        #redirects back to the preferences index page
+
+
 
 
 
