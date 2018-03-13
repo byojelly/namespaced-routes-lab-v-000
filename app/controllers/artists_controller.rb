@@ -19,7 +19,14 @@ class ArtistsController < ApplicationController
 
   def new
 #binding.pry
-    @artist = Artist.new
+    #if preferences exist and the user does not have a preference allowing them to create an artist
+    if @preferences && !@preferences.allow_create_artists
+        #send back to artists index
+        redirect_to artists_path
+    else
+        @artist = Artist.new
+    end
+
   end
 
   def create

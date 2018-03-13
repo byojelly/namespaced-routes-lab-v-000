@@ -39,11 +39,17 @@ Create a PreferencesController, routes, and views to manage the preferences. Do 
                         #redirects back to the preferences index page
 
           #lets modify our Artist Controller to be able to interpret the preferences that we setup
+                ARTIST SORT
                 #create a private action set_preferences that sets the first instance of a Preference as a variable that can be used
                 #as the first line of code in our Artist Controller, setup a before action that runs the set_preferences action on the index and new actions so that the index and new actions have a preference variable ready to operate on
                 ##if preferences exist, and there is a artist_sort_order attribute for preferences, then
                 #  #create a variable with a hash of all of the Artists that are orders by name, depending on the artist_sort_order attribute for the preferences)  else
                 # have a variable that lists all Artists without ordering
+
+                ARTIST ABILITY TO CREATE NEW SONGS
+                ##if preferences exist and the user does not have a preference allowing them to create an artist then send the user back to the artists index
+                ##else (meaning preferences exist and the user has access to create a new artist), instantiate a new artist without persisting to db
+
 
 
 
