@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       resources :songs
 
       #namespaced routes to organize
+      #this is an admin module to seperate its functionality from the user functionality
       namespace :admin do
         resources :preferences, only: [:index]
       end
