@@ -49,6 +49,7 @@ Create a PreferencesController, routes, and views to manage the preferences. Do 
                 ARTIST ABILITY TO CREATE NEW SONGS
                 ##if preferences exist and the user does not have a preference allowing them to create an artist then send the user back to the artists index
                 ##else (meaning preferences exist and the user has access to create a new artist), instantiate a new artist without persisting to db
+          #lets modify Song controller in the same manner as Artist controller
 
 
 
